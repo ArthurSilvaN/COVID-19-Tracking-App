@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CovidInfoApp</string>
+    <string name="confirmed">Confirmed</string>
 </resources>
