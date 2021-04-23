@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:theme="@android:style/Theme.NoTitleBar"
+    tools:context=".MainActivity">
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="404dp"
+        android:layout_height="560dp"
+        android:background="@drawable/illustration"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/view"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <FrameLayout
+        android:id="@+id/view"
+        android:layout_width="0dp"
+        android:layout_height="297dp"
+        android:background="@drawable/all_card_bg"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <FrameLayout
+            android:id="@+id/text"
+            android:layout_width="339dp"
+            android:layout_height="224dp"
+            android:layout_gravity="center">
+
+            <LinearLayout
+                android:layout_width="329dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="252dp"
+                    android:layout_height="94dp"
+                    android:fontFamily="@font/questrial"
+                    android:text="Be aware Stay healthy"
+                    android:textColor="#142237"
+                    android:textSize="38dp" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="339dp"
+                    android:layout_height="43dp"
+                    android:fontFamily="@font/poppins"
+                    android:gravity="center|start"
+                    android:text="Welcome to COVID-19 information portal."
+                    android:textColor="#000000"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="267dp"
+                    android:layout_height="73dp"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:gravity="bottom|end"
+                    android:text="GET STARTED"
+                    android:textColor="#000000"
+                    android:textSize="15dp" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/ivButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="40dp"
+            android:clickable="true"
+            app:srcCompat="@drawable/cta" />
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
