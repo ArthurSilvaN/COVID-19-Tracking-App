@@ -59,8 +59,8 @@
 
                 <TextView
                     android:id="@+id/textView3"
-                    android:layout_width="267dp"
-                    android:layout_height="73dp"
+                    android:layout_width="253dp"
+                    android:layout_height="76dp"
                     android:fontFamily="@font/poppins_semibold"
                     android:gravity="bottom|end"
                     android:text="GET STARTED"
