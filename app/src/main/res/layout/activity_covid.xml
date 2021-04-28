@@ -61,13 +61,36 @@
         app:layout_constraintStart_toStartOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
-    <View
+    <FrameLayout
         android:id="@+id/view3"
         android:layout_width="0dp"
         android:layout_height="103dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout2" />
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout2">
+
+        <io.ghyeok.stickyswitch.widget.StickySwitch
+            android:id="@+id/sticky_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            app:ss_animationDuration="600"
+            app:ss_animationType="line"
+            app:ss_iconPadding="18dp"
+            app:ss_iconSize="22dp"
+            app:ss_leftIcon="@drawable/infoicon"
+            app:ss_leftText="Tracker"
+            app:ss_rightIcon="@drawable/graphicon"
+            app:ss_rightText="Graphic"
+            app:ss_selectedTextSize="14sp"
+            app:ss_sliderBackgroundColor="@color/blueLigth"
+            app:ss_switchColor="@color/cardPurple"
+            app:ss_textColor="@color/cardPurple"
+            app:ss_textSize="12sp" />
+
+    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/frameLayout3"
@@ -84,7 +107,6 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="@font/poppins_bold"
-            android:text="Country"
             android:textSize="15dp" />
 
     </FrameLayout>
@@ -116,14 +138,15 @@
         <TextView
             android:id="@+id/tvActive"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:layout_gravity="bottom|right|center_horizontal"
             android:layout_margin="20dp"
             android:gravity="right|bottom"
             android:inputType="number"
+            android:maxLines="1"
             android:text=""
             android:textColor="@color/textBlue"
-            android:textSize="25dp"
+            android:textSize="23dp"
             tools:ignore="RtlHardcoded" />
 
     </FrameLayout>
@@ -154,15 +177,14 @@
 
         <TextView
             android:id="@+id/tvConfirmed"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="23dp"
             android:layout_gravity="bottom|right|center_horizontal"
             android:layout_margin="20dp"
             android:gravity="right|bottom"
-            android:inputType="number"
-            android:text=""
+            android:maxLines="1"
             android:textColor="@color/textRed"
-            android:textSize="23dp"
+            android:textSize="20dp"
             tools:ignore="RtlHardcoded" />
     </FrameLayout>
 
@@ -193,14 +215,15 @@
         <TextView
             android:id="@+id/tvDeaths"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:layout_gravity="bottom|right|center_horizontal"
             android:layout_margin="20dp"
             android:gravity="right|bottom"
             android:inputType="number"
+            android:maxLines="1"
             android:text=""
             android:textColor="@color/textBlack"
-            android:textSize="25dp"
+            android:textSize="23dp"
             tools:ignore="RtlHardcoded" />
 
     </FrameLayout>
@@ -231,15 +254,15 @@
 
         <TextView
             android:id="@+id/tvRecovered"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
             android:layout_gravity="bottom|right|center_horizontal"
             android:layout_margin="20dp"
             android:gravity="right|bottom"
-            android:inputType="numberSigned"
+            android:maxLines="1"
             android:text=""
             android:textColor="@color/textGreen"
-            android:textSize="23dp"
+            android:textSize="20dp"
             tools:ignore="RtlHardcoded" />
 
     </FrameLayout>
@@ -257,5 +280,141 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.666" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupTracker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="frameLayout3,frameLayout7,frameLayout5,frameLayout8,frameLayout6" />
+
+    <org.angmarch.views.NiceSpinner
+        android:id="@+id/spinnerSelect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toTopOf="@+id/frameLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTextAlignment="start" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupMetricSelection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view3">
+
+        <RadioButton
+            android:id="@+id/radioButtonNegative"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Negative"
+            android:textColorLink="@color/cardPurple" />
+
+        <RadioButton
+            android:id="@+id/radioButtonPositive"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Positive"
+            android:textColorLink="@color/cardPurple" />
+
+        <RadioButton
+            android:id="@+id/radioButtonDeath"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Deaths"
+            android:textColorLink="@color/cardPurple" />
+    </RadioGroup>
+
+    <com.robinhood.spark.SparkView
+        android:id="@+id/sparkView"
+        android:layout_width="0dp"
+        android:layout_height="246dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorBackgroundShade"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/radioGroupTimeSelection"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroupMetricSelection" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupTimeSelection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:background="@color/colorBackgroundShade"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/tickerView"
+        tools:layout_editor_absoluteX="0dp">
+
+        <RadioButton
+            android:id="@+id/radioButtonWeek"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1 Week"
+            android:textColorLink="@color/cardPurple" />
+
+        <RadioButton
+            android:id="@+id/radioButtonMonth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1 Month"
+            android:textColorLink="@color/cardPurple" />
+
+        <RadioButton
+            android:id="@+id/radioButtonMax"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Max"
+            android:textColorLink="@color/cardPurple" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/tvDateLabel"
+        android:layout_width="90dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintBottom_toBottomOf="@+id/tickerView"
+        app:layout_constraintEnd_toStartOf="@+id/tickerView"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tickerView"
+        tools:text="May 31, 2020" />
+
+    <com.robinhood.ticker.TickerView
+        android:id="@+id/tickerView"
+        android:layout_width="182dp"
+        android:layout_height="39dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="clip_horizontal|center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tvDateLabel"
+        tools:text="4,354" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupGraphic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="radioGroupMetricSelection,sparkView,radioGroupTimeSelection,tvDateLabel,tickerView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
