@@ -1,7 +1,7 @@
 package com.example.covidinfoapp.graphic
 
 enum class Metric {
-    NEGATIVE, POSITIVE, DEATH
+     POSITIVE, DEATH, RECOVERED
 }
 
 enum class TimeScale(val numDays: Int) {
