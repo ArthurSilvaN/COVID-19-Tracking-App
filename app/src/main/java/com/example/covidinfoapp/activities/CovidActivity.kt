@@ -4,10 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.example.covidinfoapp.R
 import com.example.covidinfoapp.data.CountryData
 import com.example.covidinfoapp.data.GraphData
@@ -16,7 +13,6 @@ import com.example.covidinfoapp.graphic.*
 import com.example.covidinfoapp.service.CovidService
 import com.leo.simplearcloader.ArcConfiguration
 import com.leo.simplearcloader.SimpleArcDialog
-import com.robinhood.ticker.TickerUtils
 import io.ghyeok.stickyswitch.widget.StickySwitch
 import kotlinx.android.synthetic.main.activity_covid.*
 import okhttp3.*
@@ -161,97 +157,98 @@ class CovidActivity : AppCompatActivity() {
         tvDate?.text = "Last Updated:" + "   ${getDate(trackerData.update)}"
     }
 
-    private fun GraphicData() {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val covidService = retrofit.create(CovidService::class.java)
-
-        covidService.getWorldHistorical().enqueue(object: Callback <GraphData> {
-            override fun onFailure(call: Call < GraphData > , t: Throwable) {
-                Log.e(TAG, "onFailure getWorld historical $t")
-            }
-
-            override fun onResponse(call: Call <GraphData> , response: Response <GraphData> ) {
-                Log.i(TAG, "onResponse $response")
-                val nationalData = response.body()
-                if (nationalData == null) {
-                    Log.w(TAG, "Did not receive a valid response body")
-                    return
-                }
-
-                setupEventListeners()
-                wordlDailyData = nationalData
-                Log.i(TAG, "Update graph with national data")
-                updateDisplayWithData(wordlDailyData)
-            }
-        })
-    }
-    private fun setupEventListeners() {
-        sparkView.isScrubEnabled = true
-        sparkView.setScrubListener {
-            itemData ->
-                if (itemData is GraphData) {
-                    updateInfoForDate(itemData)
-                }
-        }
-        tickerView.setCharacterLists(TickerUtils.provideNumberList())
-
-        // Respond to radio button selected events
-        radioGroupTimeSelection.setOnCheckedChangeListener { _, checkedId ->
-            adapter.daysAgo = when(checkedId) {
-                R.id.radioButtonWeek -> TimeScale.WEEK
-                R.id.radioButtonMonth -> TimeScale.MONTH
-                else -> TimeScale.MAX
-            }
-            // Display the last day of the metric
-            updateInfoForDate(currentlyShownData)
-            adapter.notifyDataSetChanged()
-        }
-        radioGroupMetricSelection.setOnCheckedChangeListener { _, checkedId ->
-            when(checkedId) {
-                R.id.radioButtonNegative -> updateDisplayMetric(Metric.RECOVERED)
-                R.id.radioButtonPositive -> updateDisplayMetric(Metric.POSITIVE)
-                R.id.radioButtonDeath -> updateDisplayMetric(Metric.DEATH)
-            }
-        }
-    }
-    private fun updateDisplayMetric(metric: Metric) {
-        // Update color of the chart
-        @ColorRes val colorRes = when(metric) {
-            Metric.RECOVERED -> R.color.colorRecovered
-            Metric.POSITIVE -> R.color.colorPositive
-            Metric.DEATH -> R.color.colorDeath
-        }
-        @ColorInt val colorInt = ContextCompat.getColor(this, colorRes)
-        sparkView.lineColor = colorInt
-        tickerView.textColor = colorInt
-
-        // Update metric on the adapter
-        adapter.metric = metric
-        adapter.notifyDataSetChanged()
-
-        // Reset number/date shown for most recent date
-        updateInfoForDate(currentlyShownData)
-    }
-    private fun updateDisplayWithData(dailyData: GraphData) {
-        currentlyShownData = dailyData
-        adapter = CovidSparkAdapter()
-        sparkView.adapter = adapter
-        radioButtonPositive.isChecked = true
-        radioButtonMax.isChecked = true
-        updateDisplayMetric(Metric.POSITIVE)
-    }
-    private fun updateInfoForDate(graphData: GraphData) {
-        val numCases = when(adapter.metric) {
-            Metric.RECOVERED -> graphData.recovered.dateChecked.cases.toFloat()
-            Metric.POSITIVE -> graphData.cases.dateChecked.cases.toFloat()
-            Metric.DEATH -> graphData.deaths.dateChecked.cases.toFloat()
-        }
-        tickerView.text = NumberFormat.getInstance().format(numCases)
-        tvDateLabel.text = graphData.recovered.dateChecked.toString()
-    }
+//    private fun GraphicData() {
+//        val retrofit = Retrofit.Builder()
+//            .baseUrl(BASE_URL)
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .build()
+//        val covidService = retrofit.create(CovidService::class.java)
+//
+//        covidService.getWorldHistorical().enqueue(object: Callback <GraphData> {
+//            override fun onFailure(call: Call < GraphData > , t: Throwable) {
+//                Log.e(TAG, "onFailure getWorld historical $t")
+//            }
+//
+//            override fun onResponse(call: Call <GraphData> , response: Response <GraphData> ) {
+//                Log.i(TAG, "onResponse $response")
+//                val nationalData = response.body()
+//                if (nationalData == null) {
+//                    Log.w(TAG, "Did not receive a valid response body")
+//                    return
+//                }
+//
+//                setupEventListeners()
+//                wordlDailyData = nationalData
+//                Log.i(TAG, "Update graph with national data")
+//                updateDisplayWithData(wordlDailyData)
+//            }
+//        })
+//    }
+//    private fun setupEventListeners() {
+//        sparkView.isScrubEnabled = true
+//        sparkView.setScrubListener {
+//            itemData ->
+//                if (itemData is GraphData) {
+//                    updateInfoForDate(itemData)
+//                }
+//        }
+//        tickerView.setCharacterLists(TickerUtils.provideNumberList())
+//
+//        // Respond to radio button selected events
+//        radioGroupTimeSelection.setOnCheckedChangeListener { _, checkedId ->
+//            adapter.daysAgo = when(checkedId) {
+//                R.id.radioButtonWeek -> TimeScale.WEEK
+//                R.id.radioButtonMonth -> TimeScale.MONTH
+//                else -> TimeScale.MAX
+//            }
+//            // Display the last day of the metric
+//            updateInfoForDate(currentlyShownData)
+//            adapter.notifyDataSetChanged()
+//        }
+//        radioGroupMetricSelection.setOnCheckedChangeListener { _, checkedId ->
+//            when(checkedId) {
+//                R.id.radioButtonNegative -> updateDisplayMetric(Metric.RECOVERED)
+//                R.id.radioButtonPositive -> updateDisplayMetric(Metric.POSITIVE)
+//                R.id.radioButtonDeath -> updateDisplayMetric(Metric.DEATH)
+//            }
+//        }
+//    }
+//    private fun updateDisplayMetric(metric: Metric) {
+//        // Update color of the chart
+//        @ColorRes val colorRes = when(metric) {
+//            Metric.RECOVERED -> R.color.colorRecovered
+//            Metric.POSITIVE -> R.color.colorPositive
+//            Metric.DEATH -> R.color.colorDeath
+//        }
+//        @ColorInt val colorInt = ContextCompat.getColor(this, colorRes)
+//        sparkView.lineColor = colorInt
+//        tickerView.textColor = colorInt
+//
+//        // Update metric on the adapter
+//        adapter.metric = metric
+//        adapter.notifyDataSetChanged()
+//
+//        // Reset number/date shown for most recent date
+//        updateInfoForDate(currentlyShownData)
+//    }
+//    private fun updateDisplayWithData(dailyData: GraphData) {
+//        currentlyShownData = dailyData
+//        //adapter = CovidSparkAdapter(dailyData)
+//        sparkView.adapter = adapter
+//        radioButtonPositive.isChecked = true
+//        radioButtonMax.isChecked = true
+//        updateDisplayMetric(Metric.POSITIVE)
+//    }
+//
+//    private fun updateInfoForDate(graphData: GraphData) {
+//        val numCases = when(adapter.metric) {
+//            Metric.RECOVERED -> graphData.recovered.dateChecked.cases.toFloat()
+//            Metric.POSITIVE -> graphData.cases.dateChecked.cases.toFloat()
+//            Metric.DEATH -> graphData.deaths.dateChecked.cases.toFloat()
+//        }
+//        tickerView.text = NumberFormat.getInstance().format(numCases)
+//        tvDateLabel.text = graphData.recovered.dateChecked.toString()
+//    }
 
     private fun stickySwitch(){
         sticky_switch.onSelectedChangeListener = object : StickySwitch.OnSelectedChangeListener {

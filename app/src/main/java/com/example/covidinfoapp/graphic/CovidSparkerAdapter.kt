@@ -1,26 +1,26 @@
 package com.example.covidinfoapp.graphic
 
 import android.graphics.RectF
-import android.util.Half.toFloat
 import com.example.covidinfoapp.data.GraphData
 import com.robinhood.spark.SparkAdapter
 
-class CovidSparkAdapter : SparkAdapter() {
+class CovidSparkAdapter(private val dailyData: List<GraphData>) : SparkAdapter() {
+
     var daysAgo = TimeScale.MAX
     var metric = Metric.POSITIVE
 
-    override fun getItem(index: Int) = dailyData.copy()
-
-    override fun getCount(): Int = dailyData.cases.dateChecked.size
-
     override fun getY(index: Int): Float {
-        val chosenDayData = dailyData
+        val chosenDayData = dailyData[index]
         return when (metric) {
-            Metric.RECOVERED -> chosenDayData.recovered.dateChecked[]
-            Metric.POSITIVE -> chosenDayData.cases.dateChecked[]
-            Metric.DEATH -> chosenDayData.deaths.dateChecked.toFloat()
+            Metric.RECOVERED -> chosenDayData.recovered[index].dateChecked.cases.toFloat()
+            Metric.POSITIVE -> chosenDayData.cases[index].dateChecked.cases.toFloat()
+            Metric.DEATH -> chosenDayData.deaths[index].dateChecked.cases.toFloat()
         }
     }
+
+    override fun getItem(index: Int) = dailyData[index]
+
+    override fun getCount() = dailyData.size
 
     override fun getDataBounds(): RectF {
         val bounds = super.getDataBounds()
