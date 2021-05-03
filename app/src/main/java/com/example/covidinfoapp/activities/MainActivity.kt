@@ -1,12 +1,12 @@
-package com.example.covidinfoapp
+package com.example.covidinfoapp.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.widget.ImageView
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.example.covidinfoapp.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -7,7 +7,7 @@
     android:layout_gravity="center"
     android:background="@color/white"
     app:layoutDescription="@xml/activity_covid_scene"
-    tools:context=".CovidActivity">
+    tools:context=".activities.CovidActivity">
 
     <FrameLayout
         android:id="@+id/frameLayout2"

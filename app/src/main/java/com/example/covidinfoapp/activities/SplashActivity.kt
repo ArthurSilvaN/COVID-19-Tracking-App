@@ -1,10 +1,11 @@
-package com.example.covidinfoapp
+package com.example.covidinfoapp.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.Window
+import androidx.appcompat.app.AppCompatActivity
+import com.example.covidinfoapp.R
 
 @Suppress("DEPRECATION")
 class SplashActivity : AppCompatActivity() {

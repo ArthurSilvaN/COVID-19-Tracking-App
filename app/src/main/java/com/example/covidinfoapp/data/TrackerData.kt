@@ -1,4 +1,4 @@
-package com.example.covidinfoapp
+package com.example.covidinfoapp.data
 
 data class TrackerData(
     val updated: Long,

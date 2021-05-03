@@ -1,4 +1,4 @@
-package com.example.covidinfoapp
+package com.example.covidinfoapp.activities
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -8,8 +8,12 @@ import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.covidinfoapp.R
+import com.example.covidinfoapp.data.CountryData
+import com.example.covidinfoapp.data.GraphData
+import com.example.covidinfoapp.data.TrackerData
 import com.example.covidinfoapp.graphic.*
-import com.google.gson.GsonBuilder
+import com.example.covidinfoapp.service.CovidService
 import com.leo.simplearcloader.ArcConfiguration
 import com.leo.simplearcloader.SimpleArcDialog
 import com.robinhood.ticker.TickerUtils
@@ -25,7 +29,6 @@ import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 @Suppress("DEPRECATION")
 class CovidActivity : AppCompatActivity() {
 
@@ -36,38 +39,29 @@ class CovidActivity : AppCompatActivity() {
     }
 
     private lateinit var adapter: CovidSparkAdapter
-    private lateinit var currentlyShownData: CountryData
+    private lateinit var currentlyShownData: GraphData
 
-    private lateinit var perStateDailyData: Map<String, List<CovidData>>
     private lateinit var perCountryDailyData: Map<String, List<CountryData>>
     private lateinit var countryDailyData: List<CountryData>
-    private lateinit var wordlDailyData: CountryData
+    private lateinit var wordlDailyData: GraphData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_covid)
 
-        GraphicData()
+        //GraphicData()
         fetchData()
         stickySwitch()
     }
 
-    private fun getDate(milliSecond: Long): String? {
-        // Mon, 23 May 2021 02:01:04 PM
-        val formatter = SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss aaa")
-        val calendar: Calendar = Calendar.getInstance()
-        calendar.timeInMillis = milliSecond
-        return formatter.format(calendar.time)
-    }
-
     private fun ActionPerformed(){
-        var mDialog: SimpleArcDialog? = SimpleArcDialog(this)
-        mDialog?.setConfiguration(ArcConfiguration(this@CovidActivity))
-        mDialog?.setTitle("Loading...")
-        mDialog?.show()
+        val mDialog = SimpleArcDialog(this)
+        mDialog.setConfiguration(ArcConfiguration(this@CovidActivity))
+        mDialog.setTitle("Loading...")
+        mDialog.show()
     }
 
-    private fun fetchData() {
+    fun fetchData() {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -89,7 +83,7 @@ class CovidActivity : AppCompatActivity() {
             }
         })
 
-        covidService.getCountriesData().enqueue(object : Callback<List<CountryData>>{
+        covidService.getCountriesData().enqueue(object : Callback<List<CountryData>> {
             override fun onResponse(
                 call: Call<List<CountryData>>,
                 response: Response<List<CountryData>>
@@ -101,7 +95,7 @@ class CovidActivity : AppCompatActivity() {
                 }
 
                 perCountryDailyData = countriesData
-                    .filter { it.update != null }
+                    .filter { true }
                     .map { // State data may have negative deltas, which don't make sense to graph
                         CountryData(
                             it.update,
@@ -123,79 +117,14 @@ class CovidActivity : AppCompatActivity() {
         })
     }
 
-    private fun GraphicData(){
-        val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create()
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
-        val covidService = retrofit.create(CovidService::class.java)
-
-        covidService.getWorldHistorical().enqueue(object : Callback<CountryData> {
-            override fun onFailure(call: Call<CountryData>, t: Throwable) {
-                Log.e(TAG, "onFailure $t")
-            }
-
-            override fun onResponse(call: Call<CountryData>, response: Response<CountryData>) {
-                Log.i(TAG, "onResponse $response")
-                val nationalData = response.body()
-                if (nationalData == null) {
-                    Log.w(TAG, "Did not receive a valid response body")
-                    return
-                }
-
-                setupEventListeners()
-                wordlDailyData = nationalData
-                Log.i(TAG, "Update graph with national data")
-                updateDisplayWithData(wordlDailyData)
-            }
-        })
-
-//        covidService.getCountryData().enqueue(object : retrofit2.Callback<List<CovidData>> {
-//            override fun onFailure(call: retrofit2.Call<List<CovidData>>, t: Throwable) {
-//                Log.e(TAG, "onFailure $t")
-//            }
-//
-//            override fun onResponse(
-//                call: retrofit2.Call<List<CovidData>>,
-//                response: Response<List<CovidData>>
-//            ) {
-//                Log.i(TAG, "onResponse $response")
-//                val statesData = response.body()
-//                if (statesData == null) {
-//                    Log.w(TAG, "Did not receive a valid response body")
-//                    return
-//                }
-//
-//                perStateDailyData = statesData
-//                    .filter { it.dateChecked != null }
-//                    .map {
-//                        CovidData(
-//                            it.dateChecked,
-//                            it.positiveIncrease.coerceAtLeast(0),
-//                            it.negativeIncrease.coerceAtLeast(0),
-//                            it.deathIncrease.coerceAtLeast(0),
-//                            it.state
-//                        ) }
-//                    .reversed()
-//                    .groupBy { it.state }
-//                Log.i(TAG, "Update spinner with state names")
-//                updateSpinnerWithStateData(perStateDailyData.keys)
-//            }
-//        })
+    @SuppressLint("SimpleDateFormat")
+    private fun getDate(milliSecond: Long): String? {
+        // Mon, 23 May 2021 02:01:04 PM
+        val formatter = SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss aaa")
+        val calendar: Calendar = Calendar.getInstance()
+        calendar.timeInMillis = milliSecond
+        return formatter.format(calendar.time)
     }
-
-//    private fun updateSpinnerWithStateData(stateNames: Set<String>) {
-//        val stateAbbreviationList = stateNames.toMutableList()
-//        stateAbbreviationList.sort()
-//        stateAbbreviationList.add(0, ALL)
-//        spinnerSelect.attachDataSource(stateAbbreviationList)
-//        spinnerSelect.setOnSpinnerItemSelectedListener { parent, _, position, _ ->
-//            val selectedState = parent.getItemAtPosition(position) as String
-//            val selectedData = perStateDailyData[selectedState] ?: wordlDailyData
-//            updateDisplayWithData(selectedData)
-//        }
-//    }
 
     private fun updateSpinnerWithCountryData(countryNames: Set<String>) {
         val countryAbbreviationList = countryNames.toMutableList()
@@ -214,8 +143,17 @@ class CovidActivity : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
+    private fun updateTrackerWithData(trackerData: TrackerData){
+        tvConfirmed?.text = NumberFormat.getInstance().format(trackerData.cases)
+        tvRecovered?.text = NumberFormat.getInstance().format(trackerData.recovered)
+        tvActive?.text = NumberFormat.getInstance().format(trackerData.active)
+        tvDeaths?.text = NumberFormat.getInstance().format(trackerData.deaths)
+        tvDate?.text = "Last Updated:" + "   ${getDate(trackerData.updated)}"
+    }
+
+    @SuppressLint("SetTextI18n")
     private fun updateCountryWithData(selectedData: List<CountryData>) {
-        val trackerData = selectedData.get(0)
+        val trackerData = selectedData[0]
         tvConfirmed?.text = NumberFormat.getInstance().format(trackerData.cases)
         tvRecovered?.text = NumberFormat.getInstance().format(trackerData.recovered)
         tvActive?.text = NumberFormat.getInstance().format(trackerData.active)
@@ -223,18 +161,46 @@ class CovidActivity : AppCompatActivity() {
         tvDate?.text = "Last Updated:" + "   ${getDate(trackerData.update)}"
     }
 
+    private fun GraphicData() {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        val covidService = retrofit.create(CovidService::class.java)
+
+        covidService.getWorldHistorical().enqueue(object: Callback <GraphData> {
+            override fun onFailure(call: Call < GraphData > , t: Throwable) {
+                Log.e(TAG, "onFailure getWorld historical $t")
+            }
+
+            override fun onResponse(call: Call <GraphData> , response: Response <GraphData> ) {
+                Log.i(TAG, "onResponse $response")
+                val nationalData = response.body()
+                if (nationalData == null) {
+                    Log.w(TAG, "Did not receive a valid response body")
+                    return
+                }
+
+                setupEventListeners()
+                wordlDailyData = nationalData
+                Log.i(TAG, "Update graph with national data")
+                updateDisplayWithData(wordlDailyData)
+            }
+        })
+    }
     private fun setupEventListeners() {
         sparkView.isScrubEnabled = true
-        sparkView.setScrubListener { itemData ->
-            if (itemData is CountryData) {
-                updateInfoForDate(itemData)
-            }
+        sparkView.setScrubListener {
+            itemData ->
+                if (itemData is GraphData) {
+                    updateInfoForDate(itemData)
+                }
         }
         tickerView.setCharacterLists(TickerUtils.provideNumberList())
 
         // Respond to radio button selected events
         radioGroupTimeSelection.setOnCheckedChangeListener { _, checkedId ->
-            adapter.daysAgo = when (checkedId) {
+            adapter.daysAgo = when(checkedId) {
                 R.id.radioButtonWeek -> TimeScale.WEEK
                 R.id.radioButtonMonth -> TimeScale.MONTH
                 else -> TimeScale.MAX
@@ -244,16 +210,16 @@ class CovidActivity : AppCompatActivity() {
             adapter.notifyDataSetChanged()
         }
         radioGroupMetricSelection.setOnCheckedChangeListener { _, checkedId ->
-            when (checkedId) {
+            when(checkedId) {
+                R.id.radioButtonNegative -> updateDisplayMetric(Metric.RECOVERED)
                 R.id.radioButtonPositive -> updateDisplayMetric(Metric.POSITIVE)
                 R.id.radioButtonDeath -> updateDisplayMetric(Metric.DEATH)
             }
         }
     }
-
     private fun updateDisplayMetric(metric: Metric) {
         // Update color of the chart
-        @ColorRes val colorRes = when (metric) {
+        @ColorRes val colorRes = when(metric) {
             Metric.RECOVERED -> R.color.colorRecovered
             Metric.POSITIVE -> R.color.colorPositive
             Metric.DEATH -> R.color.colorDeath
@@ -269,34 +235,22 @@ class CovidActivity : AppCompatActivity() {
         // Reset number/date shown for most recent date
         updateInfoForDate(currentlyShownData)
     }
-
-    @SuppressLint("SetTextI18n")
-    private fun updateTrackerWithData(trackerData: TrackerData){
-        tvConfirmed?.text = NumberFormat.getInstance().format(trackerData?.cases)
-        tvRecovered?.text = NumberFormat.getInstance().format(trackerData?.recovered)
-        tvActive?.text = NumberFormat.getInstance().format(trackerData?.active)
-        tvDeaths?.text = NumberFormat.getInstance().format(trackerData?.deaths)
-        tvDate?.text = "Last Updated:" + "   ${getDate(trackerData?.updated!!.toLong())}"
-    }
-
-    private fun updateDisplayWithData(dailyData: CountryData) {
+    private fun updateDisplayWithData(dailyData: GraphData) {
         currentlyShownData = dailyData
-        adapter = CovidSparkAdapter(dailyData)
+        adapter = CovidSparkAdapter()
         sparkView.adapter = adapter
         radioButtonPositive.isChecked = true
         radioButtonMax.isChecked = true
         updateDisplayMetric(Metric.POSITIVE)
     }
-
-    private fun updateInfoForDate(countryData: CountryData) {
-        val numCases = when (adapter.metric) {
-            Metric.RECOVERED -> countryData.recovered
-            Metric.POSITIVE -> countryData.cases
-            Metric.DEATH -> countryData.deaths
+    private fun updateInfoForDate(graphData: GraphData) {
+        val numCases = when(adapter.metric) {
+            Metric.RECOVERED -> graphData.recovered.dateChecked.cases.toFloat()
+            Metric.POSITIVE -> graphData.cases.dateChecked.cases.toFloat()
+            Metric.DEATH -> graphData.deaths.dateChecked.cases.toFloat()
         }
         tickerView.text = NumberFormat.getInstance().format(numCases)
-        val outputDateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.US)
-        tvDateLabel.text = outputDateFormat.format(countryData.update)
+        tvDateLabel.text = graphData.recovered.dateChecked.toString()
     }
 
     private fun stickySwitch(){
