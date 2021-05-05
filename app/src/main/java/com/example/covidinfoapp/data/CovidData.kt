@@ -1,9 +1,12 @@
 package com.example.covidinfoapp.data
 
-data class CovidData(
-    val dateChecked: Cases,
-)
+import com.google.gson.annotations.SerializedName
+import java.util.*
 
-data class Cases (
-    val cases : Long,
+data class CovidData(
+    @SerializedName("dateChecked") val dateChecked: Date,
+    @SerializedName("positiveIncrease") val positiveIncrease: Int,
+    @SerializedName("negativeIncrease") val negativeIncrease: Int,
+    @SerializedName("deathIncrease") val deathIncrease: Int,
+    @SerializedName("state") val state: String
 )
