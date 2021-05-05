@@ -4,19 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="#6833BA"
     android:theme="@android:style/Theme.NoTitleBar"
     tools:context=".activities.SplashActivity">
 
-    <pl.droidsonroids.gif.GifTextView
-        android:id="@+id/gifTextView"
-        android:layout_width="341dp"
-        android:layout_height="381dp"
-        android:background="@mipmap/covidgif"
+    <TextView
+        android:id="@+id/textViewSplash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/questrial"
+        android:gravity="center"
+        android:text="Covid-19 Tracker"
+        android:textColor="#FFFFFF"
+        android:textSize="80sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
