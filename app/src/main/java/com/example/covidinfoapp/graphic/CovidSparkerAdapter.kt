@@ -1,10 +1,10 @@
 package com.example.covidinfoapp.graphic
 
 import android.graphics.RectF
-import com.example.covidinfoapp.data.GraphData
+import com.example.covidinfoapp.data.CovidData
 import com.robinhood.spark.SparkAdapter
 
-class CovidSparkAdapter(private val dailyData: List<GraphData>) : SparkAdapter() {
+class CovidSparkAdapter(private val dailyData: List<CovidData>) : SparkAdapter() {
 
     var daysAgo = TimeScale.MAX
     var metric = Metric.POSITIVE
@@ -12,9 +12,9 @@ class CovidSparkAdapter(private val dailyData: List<GraphData>) : SparkAdapter()
     override fun getY(index: Int): Float {
         val chosenDayData = dailyData[index]
         return when (metric) {
-            Metric.RECOVERED -> chosenDayData.recovered[index].dateChecked.cases.toFloat()
-            Metric.POSITIVE -> chosenDayData.cases[index].dateChecked.cases.toFloat()
-            Metric.DEATH -> chosenDayData.deaths[index].dateChecked.cases.toFloat()
+            Metric.NEGATIVE -> chosenDayData.negativeIncrease.toFloat()
+            Metric.POSITIVE -> chosenDayData.positiveIncrease.toFloat()
+            Metric.DEATH -> chosenDayData.deathIncrease.toFloat()
         }
     }
 
