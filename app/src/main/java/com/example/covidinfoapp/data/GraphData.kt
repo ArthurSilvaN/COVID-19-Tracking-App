@@ -1,8 +1,7 @@
 package com.example.covidinfoapp.data
 
-@Suppress("ArrayInDataClass")
-data class GraphData (
-    val cases: List<CovidData>,
-    val deaths: List<CovidData>,
-    val recovered: List<CovidData>
+data class GraphData(
+    val cases: Cases,
+    val deaths: Cases,
+    val recovered: Cases
 )
