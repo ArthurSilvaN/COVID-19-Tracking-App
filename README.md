@@ -16,9 +16,10 @@ This project is a simple API application that receives updated corona virus tack
 
 #### Tracking info
 
-<img src="https://user-images.githubusercontent.com/39159676/120689178-3938a580-c47a-11eb-86e0-f64f6b0f5245.jpeg" alt="Image Tracking List" height="400"/>
-<img src="https://user-images.githubusercontent.com/39159676/120689180-39d13c00-c47a-11eb-840e-d04972d8244f.jpeg" alt="Home Page" height="400"/>
+<p align="center">
+<img src="https://user-images.githubusercontent.com/39159676/120689178-3938a580-c47a-11eb-86e0-f64f6b0f5245.jpeg" alt="Image Tracking List" height="400"/> <img src="https://user-images.githubusercontent.com/39159676/120689180-39d13c00-c47a-11eb-840e-d04972d8244f.jpeg" alt="Home Page" height="400"/>
 -
+</p>
 
 #### Tracking Graphic
 
