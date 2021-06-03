@@ -24,8 +24,8 @@ This project is a simple API application that receives updated corona virus tack
 #### Tracking Graphic
 
 <p align="center">
-<p>*The covid graphical information history api is outdated since March 8th</p>
 <img src="https://user-images.githubusercontent.com/39159676/120689175-38077880-c47a-11eb-9c04-e6be52d7f4d3.jpeg" alt="Graph Data Image" height="400"/>
+    <p>*The covid graphical information history api is outdated since March 8th</p>
 </p>
 -
 
