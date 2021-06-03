@@ -15,12 +15,15 @@ This project is a simple API application that receives updated corona virus tack
 ## Functions
 
 #### Tracking info
-![Reply Image1](https://user-images.githubusercontent.com/39159676/110536061-c9778080-80ff-11eb-9d40-867921a0fed7.jpeg)
-![Reply Image2](https://user-images.githubusercontent.com/39159676/110536074-cda39e00-80ff-11eb-9898-8e3e7ef5931c.jpeg)
+![Image Tracking List](https://user-images.githubusercontent.com/39159676/120689178-3938a580-c47a-11eb-86e0-f64f6b0f5245.jpeg)
+![Home Page](https://user-images.githubusercontent.com/39159676/120689180-39d13c00-c47a-11eb-840e-d04972d8244f.jpeg)
 -
 
 #### Tracking Graphic
-![Search Image](https://user-images.githubusercontent.com/39159676/110536091-d1cfbb80-80ff-11eb-83e8-3850a3c32f94.jpeg)
+
+*The covid graphical information history api is outdated since March 8th
+
+![Graph Data Image](https://user-images.githubusercontent.com/39159676/120689175-38077880-c47a-11eb-9c04-e6be52d7f4d3.jpeg)
 -
 
 ### Technologies
